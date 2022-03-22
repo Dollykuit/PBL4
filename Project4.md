@@ -271,6 +271,9 @@ Changed the directory back to the 'books' directory
 
     node server.js
     
+   Created a custom TCP port 3300 in the security group of the AWS EC2 instance
+    
+    
     
 
 
