@@ -275,17 +275,22 @@ Changed the directory back to the 'books' directory
     
     
     
+<img width="960" alt="Screenshot 2022-03-22 154531" src="https://user-images.githubusercontent.com/98477745/159526081-7fa286c2-b19e-4131-a45c-8b3e8e04c57a.png">
+
+Did a test to see what the server return locally:
+
+    curl -s http://localhost:3300
 
 
 
-
+  <img width="960" alt="Screenshot 2022-03-22 160526" src="https://user-images.githubusercontent.com/98477745/159526548-0f1cc710-80f0-44e9-ad19-519f4a175bad.png">
+  
+  Accessed the app on the browser which works perfectly.
+  
   
 
-
-
-  
-
-    
+ 
+<img width="960" alt="Screenshot 2022-03-22 153709" src="https://user-images.githubusercontent.com/98477745/159527403-aa5fd3a7-fb99-473a-95c1-7b02a6f8f2d6.png">
 
 
 
