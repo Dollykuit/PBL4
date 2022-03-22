@@ -91,17 +91,196 @@ Installed the mongoose package for express framework
 
     sudo npm install express mongoose
     
-    
  
+  <img width="833" alt="Screenshot 2022-03-22 024633" src="https://user-images.githubusercontent.com/98477745/159397770-5ed6a501-1d14-4df7-b55d-ecdb63f5aaa0.png">
+
+Created a folder 'apps' and in the folder, we created a file 'routes.js'
+
+    mkdir apps && cd apps
+    
+    vi routes.js
+    
+  We added the below code to the 'routes.js' file 
+  
+  var Book = require('./models/book');
+module.exports = function(app) {
+  app.get('/book', function(req, res) {
+    Book.find({}, function(err, result) {
+      if ( err ) throw err;
+      res.json(result);
+    });
+  }); 
+  app.post('/book', function(req, res) {
+    var book = new Book( {
+      name:req.body.name,
+      isbn:req.body.isbn,
+      author:req.body.author,
+      pages:req.body.pages
+    });
+    book.save(function(err, result) {
+      if ( err ) throw err;
+      res.json( {
+        message:"Successfully added book",
+        book:result
+      });
+    });
+  });
+  app.delete("/book/:isbn", function(req, res) {
+    Book.findOneAndRemove(req.query, function(err, result) {
+      if ( err ) throw err;
+      res.json( {
+        message: "Successfully deleted the book",
+        book: result
+      });
+    });
+  });
+  var path = require('path');
+  app.get('*', function(req, res) {
+    res.sendfile(path.join(__dirname + '/public', 'index.html'));
+  });
+};
+   
+   
+<img width="960" alt="Screenshot 2022-03-22 025829" src="https://user-images.githubusercontent.com/98477745/159399296-92ea0ce4-575a-491f-8dcc-3287a3e463d2.png">
+
+**Step 4** Access the routes with AngularJS
+
+We changed to the 'Books' directory
+
+    cd ../..
+    
+Then created a folder 'public'
+
+    mkdir public && cd public
+    
+Created a file 'script.js'
+
+    vi script.js
+    
+  then pasted the below codes in the 'script.js'
+  
+ var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+  $http( {
+    method: 'GET',
+    url: '/book'
+  }).then(function successCallback(response) {
+    $scope.books = response.data;
+  }, function errorCallback(response) {
+    console.log('Error: ' + response);
+  });
+  $scope.del_book = function(book) {
+    $http( {
+      method: 'DELETE',
+      url: '/book/:isbn',
+      params: {'isbn': book.isbn}
+    }).then(function successCallback(response) {
+      console.log(response);
+    }, function errorCallback(response) {
+      console.log('Error: ' + response);
+    });
+  };
+  $scope.add_book = function() {
+    var body = '{ "name": "' + $scope.Name + 
+    '", "isbn": "' + $scope.Isbn +
+    '", "author": "' + $scope.Author + 
+    '", "pages": "' + $scope.Pages + '" }';
+    $http({
+      method: 'POST',
+      url: '/book',
+      data: body
+    }).then(function successCallback(response) {
+      console.log(response);
+    }, function errorCallback(response) {
+      console.log('Error: ' + response);
+    });
+  };
+});
+
+
+
+ <img width="960" alt="Screenshot 2022-03-22 031316" src="https://user-images.githubusercontent.com/98477745/159400942-e0b27a4d-9df0-4524-aecb-175efed5d73d.png">
+ 
+  created an 'index.html' in the 'public' directory
+ 
+    vi index.html
+    
+  Then pasted the below code:
+  
+  <!doctype html>
+<html ng-app="myApp" ng-controller="myCtrl">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <div>
+      <table>
+        <tr>
+          <td>Name:</td>
+          <td><input type="text" ng-model="Name"></td>
+        </tr>
+        <tr>
+          <td>Isbn:</td>
+          <td><input type="text" ng-model="Isbn"></td>
+        </tr>
+        <tr>
+          <td>Author:</td>
+          <td><input type="text" ng-model="Author"></td>
+        </tr>
+        <tr>
+          <td>Pages:</td>
+          <td><input type="number" ng-model="Pages"></td>
+        </tr>
+      </table>
+      <button ng-click="add_book()">Add</button>
+    </div>
+    <hr>
+    <div>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Isbn</th>
+          <th>Author</th>
+          <th>Pages</th>
+
+        </tr>
+        <tr ng-repeat="book in books">
+          <td>{{book.name}}</td>
+          <td>{{book.isbn}}</td>
+          <td>{{book.author}}</td>
+          <td>{{book.pages}}</td>
+
+          <td><input type="button" value="Delete" data-ng-click="del_book(book)"></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+
+
+<img width="960" alt="Screenshot 2022-03-22 032509" src="https://user-images.githubusercontent.com/98477745/159402129-849cb99e-838d-4bde-bccc-f6a50c5e95cd.png">
+
+Changed the directory back to the 'books' directory    
+
+      cd..
+      
+      
+ Started the node server 
  
 
-   
+    node server.js
+    
+    
+
 
 
 
   
 
 
+
+  
 
     
 
